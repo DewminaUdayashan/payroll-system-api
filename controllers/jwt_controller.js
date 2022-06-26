@@ -48,9 +48,11 @@ app.post('/signup',async (req,res)=>{
 });
 
 
+
+
 export function generateAccessToken(user) {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET,{
-        expiresIn:'40d' //change about to 10min-30min
+        expiresIn:'1d' //change about to 10min-30min
     });
 };
 
