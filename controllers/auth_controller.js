@@ -7,23 +7,21 @@ export async function login(req,res){
     try {
         const user = {...req.body};
         let pool  =await new sql.connect(config);
-        let systemUsers =await pool.request()
+        let systemUsersRecords =await pool.request()
         .input('userName',sql.NVarChar,user.userName)
         .execute('getSystemUserByUserName');
-        if(systemUsers.recordset){
-             const systemUser =  systemUsers.recordset[0];
-             console.log(systemUser);
-            if(systemUser.PASSWORD ===user.password){
-                const sendUser = { id:systemUser.ID, name:systemUser.NAME,lastLogin:systemUser.LAST_LOGIN ,roleId:systemUser.ROLE_ID};
-                console.log(sendUser);
-                const accessToken = generateAccessToken( sendUser);
+        if(systemUsersRecords.recordset[0]){
+             const systemUser =  systemUsersRecords.recordset[0];
+            if(systemUser.password === user.password){
+                const sendUser = { id:systemUser.id, name:systemUser.name,lastLogin:systemUser.last_login ,roleId:systemUser.role_id};
+                const accessToken = generateAccessToken(sendUser);
                 const refreshToken = generateRefreshToken(sendUser);
-                res.status(200).json({...sendUser,accessToken:accessToken,refreshToken:refreshToken});
+                res.status(200).json({data:{...sendUser,accessToken:accessToken,refreshToken:refreshToken}});
             }else{
-                res.sendStatus(301);
+                res.status(401).json({data:'Credentials not match'});
             }
         }else{
-            res.sendStatus(401).json('User not found');
+            res.status(401).json({data:'User not exist'});
         }
     }catch (error) {
         console.log(error);
