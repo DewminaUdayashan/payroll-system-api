@@ -111,7 +111,12 @@ export async function deleteAttendance(req,res){
         .input('StatementType',sql.VarChar,'DELETE')
         .execute('crudAttendance');
         
-        res.status(200).json({data:'Attendance successfully deleted'});
+        res.status(200).json({
+            status:200,
+            message:'Attendance deleted successfully',
+            success:true,
+            data:'Attendance deleted successfully'
+        });
         
     } catch (error) {
         console.log(error);
