@@ -7,9 +7,19 @@ export async function getEmployees(req,res){
         let employees = await pool.request()
         .input('StatementType',sql.NVarChar,'SELECT')
         .execute('crudEmployees')
-        res.status(200).json(employees.recordset);
+        res.status(200).json({
+            status:200,
+            message:'Employees fetched successfully',
+            success:true,
+            data:employees.recordset
+        });
     } catch (error) {
-        res.status(400).json(error);
+        res.status(400).json({
+            status:400,
+            message:'Error fetching employees',
+            success:false,
+            data:error
+        });
     }
 }
 
@@ -35,7 +45,12 @@ export async function createEmployee(req,res){
         .input('StatementType',sql.VarChar,'INSERT')
         .execute('crudEmployees');
         
-        res.status(201).json({data:'Employee successfully added'});
+        res.status(201).json({
+            status:201,
+            message:'Employee added successfully',
+            success:true,
+            data:1
+        });
         
     } catch (error) {
         res.status(400).json(error);
@@ -66,11 +81,20 @@ export async function updateEmployee(req,res){
         .input('StatementType',sql.VarChar,'UPDATE')
         .execute('crudEmployees');
         
-        res.status(200).json({data:'Employee successfully updated'});
+        res.status(200).json({
+            status:200,
+            message:'Employee updated successfully',
+            success:true,
+            data:1
+        });
         
     } catch (error) {
-        console.log(error);
-        res.status(400).json(error);
+        res.status(400).json({
+            status:400,
+            message:'Employee update failed',
+            success:false,
+            data:error
+        });
     }
 }
 
@@ -94,8 +118,18 @@ export async function searchEmployee(req,res){
         .input('resigned_date',sql.DateTime,body.resignedDate)
         .input('StatementType',sql.VarChar,'LIKE')
         .execute('crudEmployees')
-        res.status(200).json(result);
+        res.status(200).json({
+            status:200,
+            message:'Employees fetched successfully',
+            success:true,
+            data:result.recordset
+        });
     } catch (error) {
-        console.log(error);
+        console.log({
+            status:400,
+            message:'Employees not fetched',
+            success:false,
+            data:error
+        });
     }
 }

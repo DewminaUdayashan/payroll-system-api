@@ -16,16 +16,35 @@ export async function login(req,res){
                 const sendUser = { id:systemUser.id, name:systemUser.name,lastLogin:systemUser.last_login ,roleId:systemUser.role_id};
                 const accessToken = generateAccessToken(sendUser);
                 const refreshToken = generateRefreshToken(sendUser);
-                res.status(200).json({data:{...sendUser,accessToken:accessToken,refreshToken:refreshToken}});
+                res.status(200).json({
+                    status:200,
+                    message:'User logged in successfully',
+                    success:true,
+                    data:{...sendUser,accessToken:accessToken,refreshToken:refreshToken}
+                });
             }else{
-                res.status(401).json({data:'Credentials not match'});
+                res.status(401).json({
+                    status:401,
+                    message:'Invalid password',
+                    success:false,
+                    data:'Credentials not match'
+                });
             }
         }else{
-            res.status(401).json({data:'User not exist'});
+            res.status(401).json({
+                status:401,
+                message:'Invalid user name',
+                success:false,
+                data:'User not exist'
+            });
         }
     }catch (error) {
-        console.log(error);
-        res.status(400).json(error);
+        res.status(400).json({
+            status:400,
+            message:'Error in login',
+            success:false,
+            data:error
+        });
     }
 }
 
