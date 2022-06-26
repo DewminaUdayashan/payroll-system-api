@@ -7,9 +7,19 @@ export async function getDepartments(req,res){
         let departments = await pool.request()
         .input('StatementType',sql.NVarChar,'SELECT')
         .execute('crudDepartments')
-        res.status(200).json(departments.recordset);
+        res.status(200).json({
+            status:200,
+            message:'Departments fetched successfully',
+            success:true,
+            data:departments.recordset
+        });
     } catch (error) {
-        res.status(400).json(error);
+        res.status(400).json({
+            status:400,
+            message:'Error fetching departments',
+            success:false,
+            data:error
+        });
     }
 }
 
@@ -25,10 +35,20 @@ export async function createDepartment(req,res){
         .execute('crudDepartments');
         
         console.log(result);
-        res.status(201).json({data:'Department successfully added'});
+        res.status(201).json({
+            status:201,
+            message:'Department added successfully',
+            success:true,
+            data:'Department successfully added'
+        });
     } catch (error) {
         console.log(error);
-        res.status(400).json(error);
+        res.status(400).json({
+            status:400,
+            message:'Error in adding department',
+            success:false,
+            data:error
+        });
     }
 }
 
@@ -43,10 +63,19 @@ export async function updateDepartment(req,res){
         .input('StatementType',sql.VarChar,'UPDATE')
         .execute('crudDepartments');
         
-        res.status(200).json({data:'Department successfully updated'});
+        res.status(200).json({
+            status:200,
+            message:'Department updated successfully',
+            success:true,
+            data:1
+        });
         
     } catch (error) {
-        console.log(error);
-        res.status(400).json(error);
+        res.status(400).json({
+            status:400,
+            message:'Department not updated',
+            success:false,
+            data:error
+        });
     }
 }

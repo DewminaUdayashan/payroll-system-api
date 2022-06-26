@@ -7,9 +7,19 @@ export async function getDesignations(req,res){
         let designations = await pool.request()
         .input('StatementType',sql.NVarChar,'SELECT')
         .execute('crudDesignations')
-        res.status(200).json(designations.recordset);
+        res.status(200).json({
+            status:200,
+            message:'Designations fetched successfully',
+            success:true,
+            data:designations.recordset
+        });
     } catch (error) {
-        res.status(400).json(error);
+        res.status(400).json({
+            status:400,
+            message:'Error fetching designations',
+            success:false,
+            data:error
+        });
     }
 }
 
@@ -25,10 +35,20 @@ export async function createDesignation(req,res){
         .input('StatementType',sql.VarChar,'INSERT')
         .execute('crudDesignations');
         
-        res.status(201).json({data:'Designation successfully added'});
+        res.status(201).json({
+            status:201,
+            message:'Designation added successfully',
+            success:true,
+            data:'Designation successfully added'
+        });
         
     } catch (error) {
-        res.status(400).json(error);
+        res.status(400).json({
+            status:400,
+            message:'Error in adding designation',
+            success:false,
+            data:error
+        });
     }
 }
 
@@ -46,10 +66,19 @@ export async function updateDesignation(req,res){
         .input('StatementType',sql.VarChar,'UPDATE')
         .execute('crudDesignations');
         
-        res.status(200).json({data:'Designation successfully updated'});
+        res.status(200).json({
+            status:200,
+            message:'Designation updated successfully',
+            success:true,
+            data:1,
+        });
         
     } catch (error) {
-        console.log(error);
-        res.status(400).json(error);
+        res.status(400).json({
+            status:400,
+            message:'Designation not updated',
+            success:false,
+            data:error
+        });
     }
 }
