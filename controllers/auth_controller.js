@@ -8,7 +8,7 @@ export async function login(req,res){
         const user = {...req.body};
         let pool  =await new sql.connect(config);
         let systemUsersRecords =await pool.request()
-        .input('userName',sql.NVarChar,user.userName)
+        .input('userName',sql.NVarChar,user.name)
         .execute('getSystemUserByUserName');
         if(systemUsersRecords.recordset[0]){
              const systemUser =  systemUsersRecords.recordset[0];
@@ -52,7 +52,7 @@ async function addSystemUser(user){
     try {
         let pool = await sql.connect(config);
         let insertUser = await pool.request()
-        .input('user_name',sql.VarChar,user.userName)
+        .input('user_name',sql.VarChar,user.name)
         .input('type',sql.Int,user.type)
         .input('StatementType',sql.VarChar,user.statementType)
         .execute('crudSystemUserMaster')

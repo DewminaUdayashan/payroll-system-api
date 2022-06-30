@@ -1,14 +1,15 @@
-import express from "express";
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { config } from "dotenv";
+import express from "express";
+import authenticateToken from './middlewares/verify_token.js';
+import addition from "./routes/addition.js";
+import attendance from "./routes/attendance.js";
 import auth from "./routes/auth.js";
-import employee from "./routes/employee.js";
 import departmet from "./routes/department.js";
 import designation from "./routes/designation.js";
-import attendance from "./routes/attendance.js";
-import addition from "./routes/addition.js";
-import authenticateToken from './middlewares/verify_token.js';
+import employee from "./routes/employee.js";
+import epf from "./routes/epf.js";
 config();
 
 const app = express();
@@ -31,6 +32,8 @@ app.use('/designations',designation);
 app.use('/attendance',attendance);
 
 app.use('/additions',addition);
+
+app.use('/epf',epf);
 
 app.listen(process.env.PORT,()=>{
     console.log(`Server running on http://localhost:${process.env.PORT}...`);

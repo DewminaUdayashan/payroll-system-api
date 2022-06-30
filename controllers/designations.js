@@ -24,6 +24,32 @@ export async function getDesignations(req,res){
 }
 
 
+export async function getDesignationsLike(req,res){
+    const body  = req.params;
+    try {
+        let pool = await sql.connect(config);
+        let departments = await pool.request()
+        .input('StatementType',sql.NVarChar,'LIKE')
+        .input('name',sql.NVarChar,body.name)
+        .execute('crudDesignations')
+        res.status(200).json({
+            status:200,
+            message:'Designations fetched successfully',
+            success:true,
+            data:departments.recordset
+        });
+    } catch (error) {
+        res.status(400).json({
+            status:400,
+            message:'Error fetching designations',
+            success:false,
+            data:error
+        });
+    }
+}
+
+
+
 export async function createDesignation(req,res){
     const body  = req.body;
     try {
