@@ -52,6 +52,7 @@ export async function getAllAdditionsForEmpByType(req,res){
 
 export async function addAddition(req,res){
     const body  = req.body;
+    console.log(body);
     try {
         let pool = await sql.connect(config);
         await pool.request()
@@ -63,7 +64,7 @@ export async function addAddition(req,res){
         .input('amount',sql.Real,body.amount)
         .input('is_deduction',sql.Bit,body.isDeduction)
         .input('is_monthly',sql.Bit,body.isMonthly)
-        .input('is_active',sql.Bit,body.isActive)
+        // .input('is_active',sql.Bit,body.isActive)
         .input('StatementType',sql.NVarChar,'INSERT')
         .execute('crudAdditions');
             res.status(200).json({

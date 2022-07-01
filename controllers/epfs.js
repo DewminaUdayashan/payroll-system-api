@@ -29,6 +29,7 @@ export async function createEPF(req,res){
         let pool = await sql.connect(config);
         let result = await pool.request()
         .input('epfNo',sql.Int,body.epfNo)
+        .input('employeeId',sql.Int,body.employeeId)
         .input('StatementType',sql.VarChar,'INSERT')
         .execute('crudEPF');
         
