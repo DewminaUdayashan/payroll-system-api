@@ -167,12 +167,17 @@ export async function searchEmployee(req,res){
         .input('surename',sql.NVarChar,body.surename)
         .input('nic',sql.NVarChar,body.nic)
         .input('StatementType',sql.VarChar,'LIKE')
-        .execute('crudEmployees')
+        .execute('crudEmployees');
+        let addresses = await pool.request()
+        .input('StatementType',sql.NVarChar,'SELECT')
+        .execute('crudEmployeesAddresses');
+
         res.status(200).json({
             status:200,
             message:'Employees fetched successfully',
             success:true,
-            data:result.recordset
+            data:result.recordset,
+            addresses:addresses.recordset
         });
     } catch (error) {
         console.log({

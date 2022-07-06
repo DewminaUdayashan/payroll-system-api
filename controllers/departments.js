@@ -23,6 +23,30 @@ export async function getDepartments(req,res){
     }
 }
 
+export async function avgAllowance(req,res){
+    const body  = req.params;
+    try {
+        let pool = await sql.connect(config);
+        let departments = await pool.request()
+        .input('StatementType',sql.NVarChar,'AVGALLOWANCE')
+        .input('id',sql.Int,body.id)
+        .execute('crudDepartments')
+        res.status(200).json({
+            status:200,
+            message:'Average allowance calculated successfully',
+            success:true,
+            data:departments.recordset
+        });
+    } catch (error) {
+        res.status(400).json({
+            status:400,
+            message:'Error fetching departments',
+            success:false,
+            data:error
+        });
+    }
+}
+
 export async function getDepartmentsLike(req,res){
     const body  = req.params;
     try {
@@ -78,6 +102,8 @@ export async function createDepartment(req,res){
 
 export async function updateDepartment(req,res){
     const body  = req.body;
+    console.log(body);
+
     try {
         let pool = await sql.connect(config);
         await pool.request()
