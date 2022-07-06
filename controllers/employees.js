@@ -32,6 +32,33 @@ export async function getEmployees(req,res){
 }
 
 
+export async function eligibleForPayment(req,res){
+    const body = req.body;
+    try {
+        let pool = await sql.connect(config);
+        let employees = await pool.request()
+        .input('year',sql.NVarChar,body.year)
+        .input('month',sql.NVarChar,body.month)
+        .input('department_id',sql.Int,body.departmentId)
+        .input('StatementType',sql.NVarChar,'SELECTFORPAYROLL')
+        .execute('crudEmployees');
+        res.status(200).json({
+            status:200,
+            message:'Employees fetched successfully',
+            success:true,
+            data:employees.recordset,
+        });
+    } catch (error) {
+        res.status(400).json({
+            status:400,
+            message:'Error fetching employees',
+            success:false,
+            data:error
+        });
+    }
+}
+
+
 export async function createEmployee(req,res){
     const body  = req.body;
     try {

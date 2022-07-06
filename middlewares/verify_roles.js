@@ -1,4 +1,3 @@
-import ROLES from "../src/roles.js";
 
 export default function verifyRole (roles){
     return (req,res,next)=>{

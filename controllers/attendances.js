@@ -3,7 +3,6 @@ import config from '../src/config.js';
 
 export async function getAttendanceForEmpMonth(req,res){
     const body  = req.body;
-    console.log(body);
     try {
         let pool = await sql.connect(config);
         let designations = await pool.request()
@@ -31,6 +30,7 @@ export async function getAttendanceForEmpMonth(req,res){
 
 export async function markAttendance(req,res){
     const body  = req.body;
+    console.log(body);
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
@@ -42,20 +42,18 @@ export async function markAttendance(req,res){
         .execute('crudAttendance');
         console.log(result);
         if(result.returnValue){
-            if(result.returnValue=1){
-                res.status(400).json({
-                    status:400,
+                res.status(200).json({
+                    status:200,
                     message:'Attendance already marked for this month',
-                    success:false,
-                    data:'Attendance already marked for this month',
+                    success:true,
+                    data:result.returnValue,
                 });
-            }
         }else{
             res.status(200).json({
                 status:200,
-                message:'Attendance marked successfully',
+                message:'Attendance marked for this month',
                 success:true,
-                data:'Attendance marked successfully'
+                data:result.returnValue,
             });
         }
         
