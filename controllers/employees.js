@@ -187,4 +187,55 @@ export async function searchEmployee(req,res){
             data:error
         });
     }
+    
 }
+
+
+/*
+  netSalary: 36666.66666666667,
+  year: 2022,
+  month: 'July',
+  issuedTo: {
+    id: 8001,
+    surename: 'Benthotage',
+    firstName: 'Dewmina',
+    epfNumber: 1001,
+    totalDays: 30
+  },
+  issuedBy: 1,
+  epf: 8333.333333333336,
+  etf: 1250.0000000000002
+*/
+export async function pay(req,res){
+    const body  = req.body;
+    console.log(body);
+    try {
+        let pool = await sql.connect(config);
+        await pool.request()
+        .input('epf_no',sql.Int,body.issuedTo.epfNumber)
+            .input('amount',sql.Decimal,body.netSalary)
+            .input('epf',sql.Int,body.epf)
+            .input('etf',sql.Int,body.etf)
+            .input('year',sql.Int,body.year)
+            .input('month',sql.Int,body.month)
+            .input('issued_to',sql.Int,body.issuedTo.id)
+            .input('issued_by',sql.Int,body.issuedBy)
+            .execute('crudPayment');
+   
+            res.status(200).json({
+                status:200,
+                message:'Payment succeeded..!',
+                success:true,
+            });
+            
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                status:400,
+                message:'Payment failed..!',
+                success:false,
+                data:error
+            });
+        }
+        
+    }
